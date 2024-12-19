@@ -76,6 +76,8 @@ button:focus-visible {
   width: 100%;
 }
 
+/*Characters CSS*/
+
 .imgContainer {
   display: flex;
   justify-content: space-evenly;
@@ -116,4 +118,18 @@ button:focus-visible {
 .starsContainer > img {
   height: 40px;
   width: 40px;
+}
+
+/*Bosses CSS*/
+.bossesDisplay {
+  list-style-type: none;
+}
+
+.bossCard {
+  background-color: brown;
+}
+
+.bossDropsContainer > img {
+  width: 200px;
+  height: 200px;
 }

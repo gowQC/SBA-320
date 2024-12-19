@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CharactersDisplay from "../components/CharactersDisplay";
+
 export default function CharactersPage() {
   const [characters, setCharacters] = useState([]);
   const [character, setCharacter] = useState("");
@@ -11,7 +12,6 @@ export default function CharactersPage() {
       const response = await fetch(url);
       const data = await response.json();
       setCharacters(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -21,9 +21,5 @@ export default function CharactersPage() {
     getCharacters(url);
   }, []);
 
-  return (
-    <>
-      <CharactersDisplay characters={characters} />
-    </>
-  );
+  return <CharactersDisplay characters={characters} />;
 }
