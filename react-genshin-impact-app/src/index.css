@@ -121,11 +121,15 @@ button:focus-visible {
 }
 
 /*Bosses CSS*/
+
 .bossesDisplay {
   list-style-type: none;
 }
 
 .bossCard {
+  width: 80%;
+  margin: auto;
+  border-radius: 20px;
   background-color: brown;
 }
 

@@ -16,7 +16,7 @@ export default function BossCard({ url, name, printName }) {
 
   useEffect(() => {
     getBossProperties(url);
-  }, []);
+  }, [url]);
 
   return (
     <>
@@ -29,6 +29,7 @@ export default function BossCard({ url, name, printName }) {
             style={{ borderRadius: "20px", border: "2px solid black" }}
           />
           <h3>{bossProperties.description}</h3>
+          <h2>Boss Drops</h2>
           <BossDrops url={url} drops={bossProperties.drops} />
         </li>
       ) : (
