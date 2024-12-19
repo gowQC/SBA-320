@@ -66,3 +66,54 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/*My CSS*/
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0;
+  width: 100%;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.imgContainer > img {
+  border-radius: 120px;
+}
+
+.charactersDisplay {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(
+    5,
+    1fr
+  ); /* 5 columns, each taking equal width */
+  gap: 30px;
+}
+
+.characterCard {
+  color: black;
+  border-radius: 20px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.characterCard * {
+  margin: 0px auto;
+}
+
+.characterCard > img {
+  border-radius: 10px;
+}
+
+.starsContainer > img {
+  height: 40px;
+  width: 40px;
+}
