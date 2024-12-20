@@ -9,7 +9,6 @@ export default function CharacterCard({ url }) {
       const response = await fetch(url);
       const data = await response.json();
       setCharacterProperties(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

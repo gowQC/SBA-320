@@ -52,27 +52,38 @@ export default function BossesDisplay({ bosses }) {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        height: "85vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+      }}
+    >
       {bosses && bosses.length > 0 ? (
         <>
-          <div className="bossesDisplay">
-            <BossCard
-              url={url + "/" + bosses[state.count]}
-              name={bosses[state.count]}
-              printName={bossNameConversions[bosses[state.count]]}
-            />
-          </div>
+          <BossCard
+            url={url + "/" + bosses[state.count]}
+            name={bosses[state.count]}
+            printName={bossNameConversions[bosses[state.count]]}
+          />
           <br />
-          {state.count > 0 ? (
-            <button onClick={decrement}>Previous Boss</button>
-          ) : (
-            <></>
-          )}{" "}
-          {state.count < bosses.length - 1 ? (
-            <button onClick={increment}>Next Boss</button>
-          ) : (
-            <></>
-          )}
+          <div className="bossButtonsContainer">
+            {state.count > 0 ? (
+              <button onClick={decrement}>Previous Boss</button>
+            ) : (
+              <button disabled onClick={decrement}>
+                Previous Boss
+              </button>
+            )}{" "}
+            {state.count < bosses.length - 1 ? (
+              <button onClick={increment}>Next Boss</button>
+            ) : (
+              <button disabled onClick={increment}>
+                Next Boss
+              </button>
+            )}
+          </div>
         </>
       ) : (
         <p>No bosses seem to be available for display...</p>

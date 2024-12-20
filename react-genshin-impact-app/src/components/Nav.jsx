@@ -7,13 +7,13 @@ export default function Nav() {
         <div>Welcome Page</div>
       </Link>
       <Link to="/characters">
-        <div>Find Characters!</div>
+        <div>Playable Characters</div>
       </Link>
       <Link to="/bosses">
-        <div>Find Bosses!</div>
+        <div>Weekly Bosses</div>
       </Link>
       <Link to="/teambuilder">
-        <div>Build Your Team!</div>
+        <div>Build Your Team</div>
       </Link>
     </ul>
   );

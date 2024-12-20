@@ -21,17 +21,22 @@ export default function BossCard({ url, name, printName }) {
   return (
     <>
       {url ? (
-        <li className="bossCard" key={name}>
+        <div className="bossCard" key={name}>
           <h1>{printName}</h1>
           <img
             src={url + "/icon"}
             alt={"Portrait of " + printName}
-            style={{ borderRadius: "20px", border: "2px solid black" }}
+            style={{
+              height: "240px",
+              width: "240px",
+              borderRadius: "20px",
+              border: "2px solid black",
+            }}
           />
-          <h3>{bossProperties.description}</h3>
+          <p>{bossProperties.description}</p>
           <h2>Boss Drops</h2>
           <BossDrops url={url} drops={bossProperties.drops} />
-        </li>
+        </div>
       ) : (
         <></>
       )}
