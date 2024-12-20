@@ -1,3 +1,11 @@
+import TeamTable from "../components/TeamTable";
+
 export default function TeamBuilderPage() {
-  return <>Teams</>;
+  return (
+    <div className="teamBuilder">
+      <TeamTable />
+      {/* <TeamTable />
+      <TeamTable /> */}
+    </div>
+  );
 }
