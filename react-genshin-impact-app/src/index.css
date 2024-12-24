@@ -188,6 +188,7 @@ h1 {
   flex-direction: column;
   justify-content: space-evenly;
   width: 90%;
+  height: 85vh;
 }
 
 .teammate {
@@ -200,6 +201,7 @@ h1 {
 .teammate * {
   justify-self: center;
   align-self: center;
+  border-radius: 120px;
 }
 
 .teammatePortrait,

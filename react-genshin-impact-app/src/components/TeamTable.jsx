@@ -13,14 +13,22 @@ export default function TeamTable() {
   const [weapons, setWeapons] = useState(localStorage.getItem("weapons")); //will store all available weapon names
   const [artifacts, setArtifacts] = useState(localStorage.getItem("artifacts")); // will store all available artifact sets
 
-  // test logs...
-  // console.log(inactiveTeamMembers);
-  // console.log(weapons);
-  // console.log(artifacts);
+  // once all other local storage values are found, results to true
+  const [isLoading, setIsLoading] = useState(true);
 
   // useState values for the form
   const [teamSlot, setTeamSlot] = useState("");
   const [chosenMember, setChosenMember] = useState("");
+  const [weaponSlot, setWeaponSlot] = useState("");
+  const [firstArtifact, setFirstArtifact] = useState("");
+  const [twoArtifacts, setTwoArtifacts] = useState(false);
+  const [secondArtifact, setSecondArtifact] = useState("");
+
+  // the final data to be sent into the Teammate components
+  const [firstTeammate, setFirstTeammate] = useState({});
+  const [secondTeammate, setSecondTeammate] = useState({});
+  const [thirdTeammate, setThirdTeammate] = useState({});
+  const [fourthTeammate, setFourthTeammate] = useState({});
 
   // populate function - populates data based on string arg passed through
   const populate = async (url, string) => {
@@ -102,136 +110,292 @@ export default function TeamTable() {
     });
   };
 
+  const handleSelectWeapon = (e) => {
+    setWeaponSlot(e.target.value);
+  };
+
+  const handleSelectFirstArtifact = (e) => {
+    const extraData = e.target.options[e.target.selectedIndex];
+    setFirstArtifact({
+      name: e.target.value,
+      firstbonus: extraData.getAttribute("firstbonus"),
+    });
+  };
+
+  const handleTwoArtifacts = (e) => {
+    setTwoArtifacts(e.target.checked);
+  };
+
+  const handleSelectSecondArtifact = (e) => {
+    const extraData = e.target.options[e.target.selectedIndex];
+    setSecondArtifact({
+      name: e.target.value,
+      firstbonus: extraData.getAttribute("secondbonus"),
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // will contain all the information for the component to render
+    const payload = {
+      charUrl: characters_url + "/" + chosenMember.name + "/icon-big",
+      weaponUrl: weapons_url + "/" + weaponSlot + "/icon",
+      firstArtifactUrl:
+        artifacts_url + "/" + firstArtifact.name + "/goblet-of-eonothem",
+      secondArtifactUrl:
+        artifacts_url + "/" + secondArtifact.name + "/goblet-of-eonothem" ||
+        null,
+    };
+    console.log(payload);
+    if (teamSlot === "1") {
+      setFirstTeammate(payload);
+    } else if (teamSlot === "2") {
+      setSecondTeammate(payload);
+    } else if (teamSlot === "3") {
+      setThirdTeammate(payload);
+    } else if (teamSlot === "4") {
+      setFourthTeammate(payload);
+    } else {
+      console.log("error somewhere with team slot...");
+    }
+  };
+
   // triggers populating of data
   useEffect(() => {
-    if (inactiveTeamMembers === null) {
-      populate(characters_url, "characters");
-    }
-    if (weapons === null) {
-      populate(weapons_url, "weapons");
-    }
-    if (artifacts === null) {
-      populate(artifacts_url, "artifacts");
-    }
+    const loadData = async () => {
+      try {
+        if (inactiveTeamMembers === null) {
+          await populate(characters_url, "characters");
+        }
+        if (weapons === null) {
+          await populate(weapons_url, "weapons");
+        }
+        if (artifacts === null) {
+          await populate(artifacts_url, "artifacts");
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.log("error in loadData somewhere...");
+      }
+    };
+    loadData();
   }, []);
 
   return (
-    <div className="teamTable">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <Teammate />
-        <Teammate />
-        <Teammate />
-        <Teammate />
-      </div>
-      <hr /> <br />
-      <form action="">
-        {/* first step: prompting team slot */}
-        <label htmlFor="characterSlot">Choose A Character Slot: </label>
-        <select
-          name="characterSlot"
-          value={teamSlot}
-          onChange={handleSelectSlot}
-        >
-          <option value=""></option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          {/* always only 4 slots - can never be more*/}
-        </select>
-
-        {/* once team slot is chosen */}
-        {teamSlot !== "" ? (
-          <>
-            <label htmlFor="chooseCharacter">Choose Your Character: </label>
+    <>
+      {isLoading === true ? (
+        <h1 style={{ height: "85vh" }}>
+          Loading data from API. Please wait...
+        </h1>
+      ) : (
+        <div className="teamTable">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Teammate teammateData={firstTeammate} />
+            <Teammate teammateData={secondTeammate} />
+            <Teammate teammateData={thirdTeammate} />
+            <Teammate teammateData={fourthTeammate} />
+          </div>
+          <br />
+          <form onSubmit={handleSubmit}>
+            {/* first step: prompting team slot */}
+            <label htmlFor="characterSlot">Choose A Character Slot: </label>
             <select
-              name="chooseCharacter"
-              value={chosenMember.name}
-              onChange={handleSelectCharacter}
+              name="characterSlot"
+              value={teamSlot}
+              onChange={handleSelectSlot}
             >
               <option value=""></option>
-              {inactiveTeamMembers && inactiveTeamMembers.length > 0 ? (
-                <>
-                  {JSON.parse(inactiveTeamMembers).map((teamMember) => {
-                    return (
-                      <option
-                        value={teamMember.character_name}
-                        type={teamMember.character_type}
-                      >
-                        {teamMember.print_name}
-                      </option>
-                    );
-                  })}
-                </>
-              ) : (
-                <>Error somewhere...</>
-              )}
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              {/* always only 4 slots - can never be more*/}
             </select>
-          </>
-        ) : (
-          <></>
-        )}
 
-        {/* once character is selected + populates based on chosen character's weapon type*/}
-        {teamSlot !== "" && chosenMember !== "" ? (
-          <>
-            <label htmlFor="chooseWeapon">Equip A Weapon: </label>
-            <select name="chooseWeapon">
-              <option value=""></option>
-              {weapons && weapons.length > 0 ? (
-                <>
-                  {JSON.parse(weapons).map((weapon) => {
-                    return (
-                      <>
-                        {/* if character's weapon type matches the weapon's own type*/}
-                        {chosenMember.type === weapon.weapon_type ? (
-                          <option value={weapon.weapon_name}>
-                            {weapon.print_name}
+            {/* once team slot is chosen */}
+            {teamSlot !== "" ? (
+              <>
+                <label htmlFor="chooseCharacter">Choose Your Character: </label>
+                <select
+                  name="chooseCharacter"
+                  value={chosenMember.name}
+                  onChange={handleSelectCharacter}
+                >
+                  <option value=""></option>
+                  {inactiveTeamMembers && inactiveTeamMembers.length > 0 ? (
+                    <>
+                      {JSON.parse(inactiveTeamMembers).map((teamMember) => {
+                        return (
+                          <option
+                            value={teamMember.character_name}
+                            type={teamMember.character_type}
+                          >
+                            {teamMember.print_name}
                           </option>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    );
-                  })}
-                </>
-              ) : (
-                <>Error somewhere...</>
-              )}
-            </select>
-          </>
-        ) : (
-          <></>
-        )}
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>Error somewhere...</>
+                  )}
+                </select>
+              </>
+            ) : (
+              <></>
+            )}
 
-        {/*once weapon is selected, display prompt for artifact*/}
+            {/* once character is selected + populates based on chosen character's weapon type*/}
+            {teamSlot !== "" && chosenMember !== "" ? (
+              <>
+                <label htmlFor="chooseWeapon">Equip A Weapon: </label>
+                <select
+                  name="chooseWeapon"
+                  value={weaponSlot}
+                  onChange={handleSelectWeapon}
+                >
+                  <option value=""></option>
+                  {weapons && weapons.length > 0 ? (
+                    <>
+                      {JSON.parse(weapons).map((weapon) => {
+                        return (
+                          <>
+                            {/* if character's weapon type matches the weapon's own type*/}
+                            {chosenMember.type === weapon.weapon_type ? (
+                              <option value={weapon.weapon_name}>
+                                {weapon.print_name}
+                              </option>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>Error somewhere...</>
+                  )}
+                </select>
+              </>
+            ) : (
+              <></>
+            )}
+            <br />
+            {/*once weapon is selected, display prompt for artifact*/}
+            {teamSlot !== "" && chosenMember !== "" && weaponSlot !== "" ? (
+              <>
+                <label htmlFor="chooseArtifact">
+                  Equip First Artifact Set:{" "}
+                </label>
+                <select
+                  name="chooseArtifact"
+                  value={firstArtifact.name}
+                  onChange={handleSelectFirstArtifact}
+                >
+                  <option value=""></option>
+                  {artifacts && artifacts.length > 0 ? (
+                    <>
+                      {JSON.parse(artifacts).map((artifact) => {
+                        return (
+                          <option
+                            value={artifact.artifact_name}
+                            firstbonus={artifact.artifact_bonus_1}
+                          >
+                            {artifact.print_name}
+                          </option>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>Error somewhere...</>
+                  )}
+                </select>{" "}
+              </>
+            ) : (
+              <></>
+            )}
 
-        {/*once first artifact is displayed, display prompt for 2-piece*/}
+            {/*once first artifact is displayed, display prompt for 2-piece*/}
+            {teamSlot !== "" &&
+            chosenMember !== "" &&
+            weaponSlot !== "" &&
+            firstArtifact !== "" ? (
+              <>
+                <label htmlFor="isTwoPiece">Use only Two-piece sets?</label>
+                <input
+                  type="checkbox"
+                  name="isTwoPiece"
+                  checked={twoArtifacts}
+                  onChange={handleTwoArtifacts}
+                />{" "}
+              </>
+            ) : (
+              <></>
+            )}
 
-        {/*if 2-piece is true, prompt for another artifact, else prompt submit button*/}
-
-        {/* <label htmlFor="chooseArtifact">Equip An Artifact Set: </label>
-        <select name="chooseArtifact"> */}
-        {/* will be dynamically populated later */}
-        {/* <option value="Nobless">Nobless</option>
-          <option value="Noblessee">Noblessee</option>
-        </select>
-        <label htmlFor="isTwoPiece">Use only Two-piece sets?</label>
-        <input type="checkbox" name="isTwoPiece" />
-        <label htmlFor="chooseSecond">Equip A Second Artifact Set: </label>
-        <select name="chooseSecond"> */}
-        {/* will be dynamically populated EXCLUDING WHAT WAS SELECTED FOR FIRST ARTIFACT later */}
-        {/* <option value="Nobless">Nobless</option>
-          <option value="Noblessee">Noblessee</option>
-        </select>*/}
-      </form>
-      <p>elemental bonuses listed here</p>
-    </div>
+            {/*if 2-piece is true, prompt for another artifact, else prompt submit button*/}
+            {teamSlot !== "" &&
+            chosenMember !== "" &&
+            weaponSlot !== "" &&
+            firstArtifact !== "" &&
+            twoArtifacts === true ? (
+              <>
+                <label htmlFor="chooseSecond">
+                  Equip Second Artifact Set:{" "}
+                </label>
+                <select
+                  name="chooseSecond"
+                  value={secondArtifact.name}
+                  onChange={handleSelectSecondArtifact}
+                >
+                  {/*dynamically populated EXCLUDING what was selected for first artifact*/}
+                  {artifacts && artifacts.length > 0 ? (
+                    <>
+                      {JSON.parse(artifacts).map((artifact) => {
+                        return (
+                          <>
+                            {artifact.artifact_name !== firstArtifact.name ? (
+                              <option
+                                value={artifact.artifact_name}
+                                secondbonus={artifact.artifact_bonus_2}
+                              >
+                                {artifact.print_name}
+                              </option>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>Error somewhere...</>
+                  )}
+                </select>
+              </>
+            ) : (
+              <></>
+            )}
+            <br />
+            {teamSlot !== "" &&
+            chosenMember !== "" &&
+            weaponSlot !== "" &&
+            firstArtifact !== "" ? (
+              <>
+                <input type="submit" value={"Submit Teammate Info"} />
+              </>
+            ) : (
+              <></>
+            )}
+          </form>
+          {/* <p>elemental bonuses listed here</p> */}
+        </div>
+      )}
+    </>
   );
 }
