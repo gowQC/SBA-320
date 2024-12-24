@@ -17,9 +17,11 @@ export default function CharactersPage() {
     }
   };
 
+  // gathers list of characters from api
   useEffect(() => {
     getCharacters(url);
   }, []);
 
+  // sends characters array to component
   return <CharactersDisplay characters={characters} />;
 }

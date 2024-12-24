@@ -5,10 +5,10 @@ export default function CharactersDisplay({ characters }) {
 
   return (
     <>
+      {/*based on characters retrieved from CharactersPage, send newly constructed/character-specific url to component*/}
       {characters && characters.length > 0 ? (
         <ul className="charactersDisplay">
           {characters.map((character) => {
-            //we want to send a character-specific url to each CharacterCard
             return <CharacterCard url={url + character} />;
           })}
         </ul>

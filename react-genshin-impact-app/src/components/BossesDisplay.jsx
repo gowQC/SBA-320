@@ -2,7 +2,9 @@ import { useReducer } from "react";
 import BossCard from "./BossCard";
 
 export default function BossesDisplay({ bosses }) {
+  // reducer used to fulfill carousel-like functionality, keeping tab of which boss is being displayed
   function reducer(state, action) {
+    // cannot exceed number of bosses or go below 0
     switch (action.type) {
       case "increment": {
         if (state.count + 1 >= bosses.length) {
@@ -26,8 +28,10 @@ export default function BossesDisplay({ bosses }) {
     }
   }
 
+  // what reducer will be changing
   const [state, dispatch] = useReducer(reducer, { count: 0 });
 
+  // simple functionality of reducer
   function increment() {
     dispatch({ type: "increment" });
   }
@@ -37,19 +41,6 @@ export default function BossesDisplay({ bosses }) {
   }
 
   const url = "https://genshin.jmp.blue/boss/weekly-boss";
-
-  const bossNameConversions = {
-    "all-devouring-narwhal": "All-Devouring Narwhal",
-    azhdaha: "Azhdaha",
-    childe: "Childe",
-    "everlasting-lord-of-arcane-wisdom": "Everlasting Lord of Arcane Wisdom",
-    "guardian-of-apep-s-oasis": "Guardian of Apep's Oasis",
-    "la-signora": "La Signora",
-    "lupus-boreas": "Lupus Boreas",
-    "magatsu-mitake-narukami-no-mikoto": "Magatsu Mitake Narukami no Mikoto",
-    stormterror: "Stormterror",
-    "the-knave": "The Knave",
-  };
 
   return (
     <div
@@ -65,7 +56,6 @@ export default function BossesDisplay({ bosses }) {
           <BossCard
             url={url + "/" + bosses[state.count]}
             name={bosses[state.count]}
-            printName={bossNameConversions[bosses[state.count]]}
           />
           <br />
           <div className="bossButtonsContainer">
@@ -91,13 +81,3 @@ export default function BossesDisplay({ bosses }) {
     </div>
   );
 }
-
-// {bosses.map((boss, index) => {
-//   return (
-//     <BossCard
-//       url={url + "/" + boss}
-//       name={boss}
-//       printName={bossNameConversions[boss]}
-//     />
-//   );
-// })}

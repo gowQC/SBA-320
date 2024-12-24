@@ -4,8 +4,6 @@ export default function TeamBuilderPage() {
   return (
     <div className="teamBuilder">
       <TeamTable />
-      {/* <TeamTable />
-      <TeamTable /> */}
     </div>
   );
 }

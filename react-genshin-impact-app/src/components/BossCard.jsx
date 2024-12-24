@@ -1,9 +1,10 @@
 import BossDrops from "./BossDrops";
 import { useState, useEffect } from "react";
 
-export default function BossCard({ url, name, printName }) {
+export default function BossCard({ url, name }) {
   const [bossProperties, setBossProperties] = useState("");
 
+  // gets boss-specific url data for each card and displays it
   const getBossProperties = async (url) => {
     try {
       const response = await fetch(url);
@@ -22,10 +23,10 @@ export default function BossCard({ url, name, printName }) {
     <>
       {url ? (
         <div className="bossCard" key={name}>
-          <h1>{printName}</h1>
+          <h1>{bossProperties.name}</h1>
           <img
             src={url + "/icon"}
-            alt={"Portrait of " + printName}
+            alt={"Portrait of " + bossProperties.name}
             style={{
               height: "240px",
               width: "240px",
@@ -35,6 +36,7 @@ export default function BossCard({ url, name, printName }) {
           />
           <p>{bossProperties.description}</p>
           <h2>Boss Drops</h2>
+          {/*boss drops data sent through additional component*/}
           <BossDrops url={url} drops={bossProperties.drops} />
         </div>
       ) : (

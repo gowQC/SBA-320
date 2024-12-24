@@ -4,6 +4,7 @@ import rarityStar from "../images/rarity_star_icon.webp";
 export default function CharacterCard({ url }) {
   const [characterProperties, setCharacterProperties] = useState("");
 
+  // will gather data to display based on character-specific url
   const getCharacterProperties = async (url) => {
     try {
       const response = await fetch(url);
@@ -18,6 +19,7 @@ export default function CharacterCard({ url }) {
     getCharacterProperties(url);
   }, []);
 
+  // finite number of elements from the game, so this will decide the character card's color
   const colorPicker = {
     Pyro: "red",
     Cryo: "lightblue",
@@ -28,6 +30,7 @@ export default function CharacterCard({ url }) {
     Dendro: "green",
   };
 
+  // dynamically outputs images of star based on character rarity, sourced by fetched data
   const renderStars = (rarity) => {
     const stars = [];
     for (let i = 0; i < rarity; i++) {

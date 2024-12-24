@@ -143,10 +143,12 @@ export default function TeamTable() {
       firstArtifactUrl:
         artifacts_url + "/" + firstArtifact.name + "/goblet-of-eonothem",
       secondArtifactUrl:
-        artifacts_url + "/" + secondArtifact.name + "/goblet-of-eonothem" ||
-        null,
+        artifacts_url + "/" + secondArtifact.name + "/goblet-of-eonothem",
     };
-    console.log(payload);
+    // executed if no second artifact set is chosen
+    if (secondArtifact.name === undefined) {
+      payload.secondArtifactUrl = undefined;
+    }
     if (teamSlot === "1") {
       setFirstTeammate(payload);
     } else if (teamSlot === "2") {
@@ -183,12 +185,14 @@ export default function TeamTable() {
 
   return (
     <>
+      {/*if localStorage values are still loading*/}
       {isLoading === true ? (
         <h1 style={{ height: "85vh" }}>
           Loading data from API. Please wait...
         </h1>
       ) : (
         <div className="teamTable">
+          {/*load normal content if assets loaded - each prompt displays next prompt, all the way until a submit button displays*/}
           <div
             style={{
               display: "flex",

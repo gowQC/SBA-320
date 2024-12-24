@@ -16,9 +16,11 @@ export default function BossesPage() {
     }
   };
 
+  // get list of bosses from api
   useEffect(() => {
     getBosses(url);
   }, []);
 
+  // send list of bosses to component
   return <BossesDisplay bosses={bosses} />;
 }

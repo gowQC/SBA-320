@@ -25,13 +25,23 @@ export default function Teammate({ teammateData }) {
           height="180px"
           width="180px"
         />
-        <img
-          className="teammateArtifact2"
-          src={teammateData.secondArtifactUrl || questionMark}
-          alt=""
-          height="180px"
-          width="180px"
-        />
+        {teammateData.secondArtifactUrl === undefined ? (
+          <img
+            className="teammateArtifact2"
+            src={questionMark}
+            alt=""
+            height="180px"
+            width="180px"
+          />
+        ) : (
+          <img
+            className="teammateArtifact2"
+            src={teammateData.secondArtifactUrl}
+            alt=""
+            height="180px"
+            width="180px"
+          />
+        )}
       </div>
     </>
   );
